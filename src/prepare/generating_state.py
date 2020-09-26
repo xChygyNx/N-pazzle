@@ -2,7 +2,7 @@ import os
 from random import choice
 from typing import List
 import src.config as config
-from src.validating_states import ValidateState
+from src.prepare.validating_states import ValidateState
 
 
 __all__ = ['RandomInitStateGenerator', 'SnailState', 'StateFromFile']

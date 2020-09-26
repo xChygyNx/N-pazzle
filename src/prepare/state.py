@@ -1,9 +1,9 @@
 from typing import List
-from src.generating_state import *
+from src.prepare.generating_state import *
 from src.exceptions.exceptions import *
-from src.exist_solution import ExistSolution
-from src.validating_states import ValidateState
-from src.console_parser import ConsoleParser
+from src.prepare.exist_solution import ExistSolution
+from src.prepare.validating_states import ValidateState
+from src.prepare.console_parser import ConsoleParser
 
 
 class NPuzzle:
@@ -33,7 +33,7 @@ class NPuzzle:
 			ValidateState(state, self.target_file)
 			self.side = len(state)
 			return state
-		elif not self.side == 0:
+		elif self.side is not None:
 			return SnailState(self.side).get_state()
 		elif self.start_file is not None:
 			init_state = StateFromFile(self.start_file).get_state()
@@ -42,7 +42,7 @@ class NPuzzle:
 		else:
 			raise NeedUsage()
 
-	def print_state(self):
+	def print_states(self):
 		print("Source state")
 		side = len(self.init_state)
 		for i in range(side):
@@ -56,13 +56,4 @@ class NPuzzle:
 				num = self.target_state[i][j]
 				print(num, end='\t')
 			print()
-
-
-parser = ConsoleParser.get_argparse()
-args = parser.parse_args()
-try:
-	npzl = NPuzzle(side=args.side, start_file=args.start_file, target_file=args.target_file)
-	npzl.print_state()
-except Exception as exc:
-	print(exc)
 

@@ -1,5 +1,5 @@
 from typing import List, Union
-from src.format_state import FormatState
+from src.prepare.format_state import FormatState
 
 
 class ExistSolution:
