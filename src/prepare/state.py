@@ -3,7 +3,6 @@ from src.prepare.generating_state import *
 from src.exceptions.exceptions import *
 from src.prepare.exist_solution import ExistSolution
 from src.prepare.validating_states import ValidateState
-from src.prepare.console_parser import ConsoleParser
 
 
 class NPuzzle:
