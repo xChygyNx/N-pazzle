@@ -20,4 +20,15 @@ class ConsoleParser:
 		                    required=False,
 		                    default=None,
 		                    help='File which stored target state')
+		parser.add_argument('--heuristics', '-hr',
+		                    required=False,
+		                    type=str,
+		                    default='md',
+		                    choices=['md', 'lc', 'ct'],
+		                    help='Choice of heuristic for search solution')
+		parser.add_argument('--hungry',
+		                    required=False,
+		                    action='store_true',
+		                    help='Hungry mode')
+
 		return parser

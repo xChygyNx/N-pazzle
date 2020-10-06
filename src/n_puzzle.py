@@ -8,6 +8,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	try:
 		states = NPuzzle(side=args.side, start_file=args.start_file, target_file=args.target_file)
+		states.print_states()
+		print(args.hungry)
 	except (NotValidMatrix, ImpossibleSolute, NeedUsage) as exc:
 		print(exc)
-	

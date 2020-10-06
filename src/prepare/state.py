@@ -3,6 +3,7 @@ from src.prepare.generating_state import *
 from src.exceptions.exceptions import *
 from src.prepare.exist_solution import ExistSolution
 from src.prepare.validating_states import ValidateState
+from src.prepare.heuristics import *
 
 
 class NPuzzle:
@@ -56,3 +57,7 @@ class NPuzzle:
 				print(num, end='\t')
 			print()
 
+if __name__ == '__main__':
+	npuzzle = NPuzzle(side=3)
+	npuzzle.print_states()
+	print(f'manhattan distance {manhattan_distance(npuzzle.init_state, npuzzle.target_state)}')
