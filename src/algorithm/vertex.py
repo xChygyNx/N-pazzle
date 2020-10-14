@@ -1,13 +1,15 @@
-from typing import List, Any
+from typing import List, Any, Callable
+import random
 
 class Vertex:
-	def __init__(self, *, state: List[List[int]], parent: Any = None, steps_to_init: int):
+	def __init__(self, *, state: List[List[int]], parent: Any = None, steps_from_init: int,
+	             steps_to_target: int):
 		self.parent = parent
 		self.state = state
-		self.steps_to_init = steps_to_init
-		self.steps_to_target = 10
+		self.steps_from_init = steps_from_init
+		self.steps_to_target = steps_to_target
 
-	def is_square(self)->bool:
+	def is_square(self) -> bool:
 		row_count = len(self.state)
 		for line in self.state:
 			if not len(line) == row_count:
@@ -29,44 +31,43 @@ class Vertex:
 
 	def __lt__(self, other):
 		self.check(other)
-		for lines in zip(self.state, other.state):
-			for nums in zip(lines[0], lines[1]):
-				if nums[0] != nums[1]:
-					if nums[1] < nums[0]:
-						return False
-					else:
-						return True
+		if not self.__eq__(other):
+			if other.potential_steps() < self.potential_steps():
+				return False
+			else:
+				return True
 		return False
 
 	def __gt__(self, other):
 		self.check(other)
-		for lines in zip(self.state, other.state):
-			for nums in zip(lines[0], lines[1]):
-				if nums[0] != nums[1]:
-					if nums[1] > nums[0]:
-						return False
-					else:
-						return True
+		if not self.__eq__(other):
+			if other.potential_steps() > self.potential_steps():
+				return False
+			else:
+				return True
 		return False
 
 	def __le__(self, other):
 		self.check(other)
-		if self.__lt__(other) or self.__eq__(other):
-			return True
+		if not self.__eq__(other):
+			if other.potential_steps() <= self.potential_steps():
+				return False
+			else:
+				return True
 		return False
 
 	def __ge__(self, other):
 		self.check(other)
-		if self.__gt__(other) or self.__eq__(other):
-			return True
+		if not self.__eq__(other):
+			if other.potential_steps() >= self.potential_steps():
+				return False
+			else:
+				return True
 		return False
 
 	def __eq__(self, other):
-		self.check(other)
-		for lines in zip(self.state, other.state):
-			for nums in zip(lines[0], lines[1]):
-				if nums[0] != nums[1]:
-					return False
+		if not self.__hash__() == other.__hash__():
+			return False
 		return True
 
 	def state_to_str(self):
@@ -77,25 +78,34 @@ class Vertex:
 		return res
 
 	def potential_steps(self):
-		return self.steps_to_init + self.steps_to_target
-
+		return self.steps_from_init + self.steps_to_target
 
 	def __hash__(self):
 		return hash(self.state_to_str())
 
+	def __eq__(self, other):
+		if isinstance(self, other.__class__) and self.__hash__() == other.__hash__():
+			return True
+		return False
+
+	def print_state(self):
+		for line in self.state:
+			for elem in line:
+				print(elem, end='\t')
+			print()
 
 
 if __name__ == '__main__':
-	a = Vertex(state=[[2, 2], [4, 6]], steps_to_init=0)
-	b = Vertex(state=[[2, 6], [4, 2]], parent=a, steps_to_init=1)
-	print(b)
-	print(a == b.parent)
-	res = {a: 15,
-	     b: 18}
-	for rec in res:
-		print(rec)
-	print()
-	res[Vertex(state=[[2, 6], [4, 2]], parent=a, steps_to_init=1)] = 20
-	for rec in res:
-		print(rec)
+	a = Vertex(state=[[2, 2], [4, 6]], steps_from_init=-43)
+	b = Vertex(state=[[2, 4], [4, 6]], parent=a, steps_from_init=1)
+	c = Vertex(state=[[2, 2], [4, 6]], parent=a, steps_from_init=1)
+	mn = {c}
+	print(a in mn)
+	tmp = {a}.intersection(mn)
+	d = tmp.pop()
+	a.steps_from_init = 66
+	print(d.parent.steps_from_init)
+
+	# print(d.steps_from_init)
+
 

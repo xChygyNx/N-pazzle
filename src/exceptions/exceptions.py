@@ -1,4 +1,4 @@
-__all__ = ['NeedUsage', 'NotValidMatrix', 'ImpossibleSolute']
+__all__ = ['NeedUsage', 'NotValidMatrix', 'ImpossibleSolute', 'NotFoundVoid']
 
 
 class NotValidMatrix(Exception):
@@ -12,6 +12,11 @@ class NotValidMatrix(Exception):
 class ImpossibleSolute(Exception):
 	def __str__(self):
 		return f"Impossible solute task with specified start and target state"
+
+
+class NotFoundVoid(Exception):
+	def __str__(self):
+		return "State haven't got void"
 
 
 class NeedUsage(Exception):
