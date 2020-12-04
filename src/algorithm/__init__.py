@@ -24,23 +24,23 @@ def variants_of_step(state: Vertex, target: List[List[int]],
 	if void.row > 0:
 		next_state[void.row][void.column], next_state[void.row - 1][void.column] =\
 			next_state[void.row - 1][void.column], next_state[void.row][void.column]
-		yield Vertex(state=next_state, parent=state.state, steps_from_init=state.steps_from_init + 1,
+		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
 		             steps_to_target=heuristic(next_state, target))
 	next_state = deepcopy(state.state)
 	if void.row < (len(state.state) - 1):
 		next_state[void.row][void.column], next_state[void.row + 1][void.column] = \
 			next_state[void.row + 1][void.column], next_state[void.row][void.column]
-		yield Vertex(state=next_state, parent=state.state, steps_from_init=state.steps_from_init + 1,
+		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
 		             steps_to_target=heuristic(next_state, target))
 	next_state = deepcopy(state.state)
 	if void.column > 0:
 		next_state[void.row][void.column], next_state[void.row][void.column - 1] =\
 			next_state[void.row][void.column - 1], next_state[void.row][void.column]
-		yield Vertex(state=next_state, parent=state.state, steps_from_init=state.steps_from_init + 1,
+		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
 		             steps_to_target=heuristic(next_state, target))
 	next_state = deepcopy(state.state)
 	if void.column < (len(state.state[void.row]) - 1):
 		next_state[void.row][void.column], next_state[void.row][void.column + 1] = \
 			next_state[void.row][void.column + 1], next_state[void.row][void.column]
-		yield Vertex(state=next_state, parent=state.state, steps_from_init=state.steps_from_init + 1,
+		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
 		             steps_to_target=heuristic(next_state, target))
