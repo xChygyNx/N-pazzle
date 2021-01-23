@@ -3,23 +3,25 @@ from src.exceptions.exceptions import *
 
 
 class ValidateState:
-	def __init__(self, state: List[List[str]], file: str):
+	def __init__(self, state: List[List[int]], state_size: int, file:str):
 		self.state = state
-		self.state_size = len(self.state)
+		self.state_size = state_size
 		self.file = file
 
 	def is_square(self) -> None:
+		if not len(self.state) == self.state_size:
+			raise NotValidMatrix(f"Count of state's lines does not correspond to the stated")
 		for line in self.state:
 			if not len(line) == self.state_size:
 				raise NotValidMatrix(f'Invalid file {self.file}: state not square')
 
-	def is_only_numeric_value(self) -> None:
-		for i in range(self.state_size):
-			for j in range(len(self.state[i])):
-				try:
-					self.state[i][j] = int(self.state[i][j])
-				except ValueError:
-					raise NotValidMatrix(f'Invalid file {self.file}: state have not numerical value')
+	# def is_only_numeric_value(self) -> None:
+	# 	for i in range(self.state_size):
+	# 		for j in range(len(self.state[i])):
+	# 			try:
+	# 				self.state[i][j] = int(self.state[i][j])
+	# 			except ValueError:
+	# 				raise NotValidMatrix(f'Invalid file {self.file}: state have not numerical value')
 
 	def is_unique_values(self) -> None:
 		meeting_nums = set()
@@ -38,6 +40,6 @@ class ValidateState:
 
 	def validate_state(self) -> None:
 		self.is_square()
-		self.is_only_numeric_value()
+		# self.is_only_numeric_value()
 		self.is_unique_values()
 		self.is_have_void()

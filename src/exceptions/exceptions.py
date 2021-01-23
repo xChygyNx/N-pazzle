@@ -1,9 +1,23 @@
-__all__ = ['NeedUsage', 'NotValidMatrix', 'ImpossibleSolute', 'NotFoundVoid']
+__all__ = ['NeedUsage', 'NotValidMatrix', 'ImpossibleSolute', 'NotFoundVoid', 'InvalidStateSize',
+		   'InvalidNumInState']
 
 
 class NotValidMatrix(Exception):
 	def __init__(self, info: str):
 		self.text = f"Not valid source matrix: {info}"
+
+	def __str__(self):
+		return self.text
+
+
+class InvalidStateSize(Exception):
+	def __str__(self):
+		return "State have got invalid size"
+
+
+class InvalidNumInState(Exception):
+	def __init__(self, num):
+		self.text = f"Not valid num in state: {num}"
 
 	def __str__(self):
 		return self.text

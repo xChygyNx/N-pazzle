@@ -1,23 +1,27 @@
-from typing import List, Callable, Set, Dict
-from queue import PriorityQueue
+from typing import List, Callable, Set, Dict, Optional
 from src.algorithm import *
 from src.prepare.heuristics import *
 from copy import deepcopy
+from src import Vertex
 import timeit
 import heapq
+import cProfile
+
+__all__ = ['Algorithm']
+
+WHITE = '\033[37m'
 
 
-
-
-
-class TroubleShooter:
+class Algorithm:
 	def __init__(self, *, init_state: Vertex, target: List[List[int]],
-	             heuristic: Callable[[List[List[int]], List[List[int]]], int]):
+	             heuristic: Callable[[List[List[int]], List[List[int]]], int],
+				 hungry_mode: bool = False):
 		self.opened = []
 		self.closed = dict()
 		self.init_state = init_state
 		self.target_state = target
 		self.heuristic = heuristic
+		self.hungry_mode = hungry_mode
 
 
 	def get_from_closed(self, vertex: Vertex) -> Vertex:
@@ -29,13 +33,39 @@ class TroubleShooter:
 		elem = self.opened[ind]
 		return elem
 
-	def solute(self):
+	def solute(self) -> None:
+		if not self.hungry_mode:
+			finish_node = self.well_fed_solute()
+		else:
+			finish_node = self.hungry_mode_solute()
+		self.print_solution(finish_node)
+		print(f'steps from init = {finish_node.steps_from_init}')
+
+	def hungry_mode_solute(self) -> Optional[Vertex]:
+		success = False
+		state = self.init_state
+		closed_states = set()
+		while not success:
+			if not self.heuristic(state.state, self.target_state):
+				success = True
+				continue
+			state = next_step(state, self.target_state, self.heuristic, closed_states)
+		print(f'steps to target = {state.steps_to_target}')
+		print(f'len closed_states {len(closed_states)}')
+		return state
+
+
+	def well_fed_solute(self) -> Optional[Vertex]:
 		success = False
 		state = self.init_state
 		heapq.heapify(self.opened)
 		heapq.heappush(self.opened, state)
+		i=0
 		while len(self.opened):
+			# print(i)
+			# i += 1
 			state = heapq.heappop(self.opened)
+			# print(f'steps to target = {state.steps_to_target}')
 			self.closed[state.state_to_str()] = state
 			if not self.heuristic(state.state, self.target_state):
 				success = True
@@ -55,28 +85,22 @@ class TroubleShooter:
 						heapq.heappush(self.opened, variant)
 		if success:
 			print('Congratulate')
-			self.print_solution(state)
-			print(f'steps from init = {state.steps_from_init}')
+			return state
 		else:
 			print('Ouch')
 
 	def print_solution(self, state: Vertex) -> None:
+		if state is None:
+			return
 		solution = []
 		tmp = state
 		while tmp is not None:
 			solution.append(tmp)
 			tmp = tmp.parent
 		solution.reverse()
-		for elem in solution:
+		print(WHITE)
+		for step, elem in enumerate(solution):
+			print(f'Step {step}')
 			elem.print_state()
 			print()
 
-
-if __name__ == '__main__':
-	# a = Vertex(state=[[6, 14, 1, 2], [7, 3, 4, 5], [11, 15, 12, 13], [0, 8, 9, 10]], steps_from_init=0, steps_to_target=10)
-	# sol = TroubleShooter(init_state=a, target=[[1, 2, 3, 4], [12, 13, 14, 5], [11, 0, 15, 6], [10, 9, 8, 7]], heuristic=manhattan_distance)
-	a = Vertex(state=[[0, 2, 1], [8, 7, 4], [3, 5, 6]], steps_from_init=0, steps_to_target=16.0)
-	sol = TroubleShooter(init_state=a, target=[[1, 2, 3], [8, 0, 4], [7, 6, 5]], heuristic=manhattan_distance)
-	elapsed_time = timeit.timeit(sol.solute, number=1)
-	print(f'time = {elapsed_time}')
-	# sol.solute()

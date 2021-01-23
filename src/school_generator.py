@@ -3,6 +3,9 @@ import argparse
 import random
 
 
+__all__ = ['make_puzzle', 'make_goal']
+
+
 def make_puzzle(s, solvable, iterations):
 	def swap_empty(p):
 		idx = p.index(0)
@@ -59,6 +62,16 @@ def make_goal(s):
 	return puzzle
 
 
+def in_file():
+	with open('../states/test.txt', 'w') as f:
+		f.write("# This puzzle is %s\n" % ("solvable" if solv else "unsolvable"))
+		f.write("%d\n" % s)
+		for y in range(s):
+			for x in range(s):
+				f.write("%s " % (str(puzzle[x + y * s]).rjust(w)))
+			f.write('\n')
+
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 
@@ -99,3 +112,4 @@ if __name__ == "__main__":
 		for x in range(s):
 			print("%s" % (str(puzzle[x + y * s]).rjust(w)), end='\t')
 		print()
+	in_file()

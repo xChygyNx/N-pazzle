@@ -1,8 +1,10 @@
-from typing import Iterable, NamedTuple, Callable
-from src.algorithm.vertex import *
+from typing import Iterable, NamedTuple, Callable, Set, List
+from src import Vertex
 from src.exceptions.exceptions import *
 from copy import deepcopy
 
+
+__all__ = ['find_void', 'next_step', 'variants_of_step']
 
 class Coordinate(NamedTuple):
 	row: int
@@ -44,3 +46,20 @@ def variants_of_step(state: Vertex, target: List[List[int]],
 			next_state[void.row][void.column + 1], next_state[void.row][void.column]
 		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
 		             steps_to_target=heuristic(next_state, target))
+
+
+def next_step(state: Vertex, target: List[List[int]],
+			  heuristic: Callable[[List[List[int]], List[List[int]]], int],
+			  closed_states: Set[Vertex]) -> Vertex:
+	result = None
+	closed_states.add(state)
+	for variant in variants_of_step(state, target, heuristic):
+		if variant in closed_states:
+			continue
+		if result is None:
+			result = variant
+		else:
+			result = variant if variant.steps_to_target < result.steps_to_target else result
+	return result
+
+

@@ -1,6 +1,7 @@
 from typing import List, NamedTuple, Union, Any
 import math
 
+__all__ = ['manhattan_distance', 'linear_conflict', 'corner_tiles']
 
 class Location(NamedTuple):
 	x: int
@@ -19,12 +20,14 @@ def manhattan_distance(state: List[List[int]], target: List[List[int]]) -> int:
 	res = 0
 	for i in range(len(state)):
 		for j in range(len(state[i])):
-			target_pos = find_target_pos(state[i][j], target)
+			value = state[i][j]
+			target_pos = find_target_pos(value, target)
 			res += math.fabs(i - target_pos.x) + math.fabs(j - target_pos.y)
 	return res
 
 
 def count_conflicts(state_line: List[int], target_line: List[int]) -> int:
+	# res = manhattan_distance(state, target)
 	res = 0
 	for i in range(len(state_line) - 1):
 		for j in range(i + 1, len(state_line)):

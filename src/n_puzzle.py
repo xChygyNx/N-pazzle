@@ -1,10 +1,9 @@
-from src.prepare.state import NPuzzle
+from src import *
 from src.prepare.console_parser import ConsoleParser
 from src.exceptions.exceptions import *
 from src.prepare.heuristics import *
 from src.prepare.generating_state import *
-from src.algorithm import *
-from src.algorithm.trouble_shooter import *
+from src.algorithm.a_star import *
 
 
 heuristics = {
@@ -20,15 +19,17 @@ if __name__ == '__main__':
 	# 	states = NPuzzle(side=args.side, start_file=args.start_file, target_file=args.target_file)
 	# 	states.print_states()
 	# 	print(args.hungry)
-	# except (NotValidMatrix, ImpossibleSolute, NeedUsage) as exc:
-	# 	print(exc)
-	print(args.heuristics)
-	init_state = StateFromFile('file.txt').get_state()
-	target_state = SnailState(args.side).get_state()
+	try:
+		init_state = InitState(args).get_state()
+		target_state = TargetState(args, init_state).get_state()
+	except (NeedUsage, ImpossibleSolute, InvalidStateSize, InvalidNumInState) as exc:
+		print(exc)
+		exit()
 	heuristic = heuristics.get(args.heuristics)
+	step_to_target = heuristic(init_state, target_state)
 	init_vertex = Vertex(state=init_state, steps_from_init=0,
-	                     steps_to_target=heuristic(init_state, target_state))
-	n_puzzle = TroubleShooter(init_state=init_vertex, target=target_state, heuristic=heuristic)
+	                     steps_to_target=step_to_target)
+	n_puzzle = Algorithm(init_state=init_vertex, target=target_state, heuristic=heuristic)
 	n_puzzle.solute()
 
 
