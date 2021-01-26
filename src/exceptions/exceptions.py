@@ -25,7 +25,7 @@ class InvalidNumInState(Exception):
 
 class ImpossibleSolute(Exception):
 	def __str__(self):
-		return f"Impossible solute task with specified start and target state"
+		return f"Impossible solute task with this start state"
 
 
 class NotFoundVoid(Exception):

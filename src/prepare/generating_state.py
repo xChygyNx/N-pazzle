@@ -121,7 +121,7 @@ class TargetState:
 
 	def get_state(self) -> List[List[int]]:
 		size = len(self.init_state)
-		if self.args.size < 3:
+		if self.args.size and self.args.size < 3:
 			raise InvalidStateSize
 		state = SnailState(size).get_state()
 		return state

@@ -85,10 +85,10 @@ class Vertex:
 	# 	return self.steps_from_init + self.steps_to_target
 
 	def __hash__(self):
-		return self.str_state
+		return hash(self.str_state)
 
 	def __eq__(self, other):
-		if isinstance(self, other.__class__) and self.str_state == other.str_state:
+		if isinstance(self, other.__class__) and hash(self.str_state) == hash(other.str_state):
 			return True
 		return False
 

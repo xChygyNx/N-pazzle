@@ -34,60 +34,31 @@ class Algorithm:
 		return elem
 
 	def solute(self) -> None:
-		if not self.hungry_mode:
-			finish_node = self.well_fed_solute()
-		else:
-			finish_node = self.hungry_mode_solute()
-		self.print_solution(finish_node)
-		print(f'steps from init = {finish_node.steps_from_init}')
-
-	def hungry_mode_solute(self) -> Optional[Vertex]:
-		success = False
-		state = self.init_state
-		closed_states = set()
-		while not success:
-			if not self.heuristic(state.state, self.target_state):
-				success = True
-				continue
-			state = next_step(state, self.target_state, self.heuristic, closed_states)
-		print(f'steps to target = {state.steps_to_target}')
-		print(f'len closed_states {len(closed_states)}')
-		return state
-
-
-	def well_fed_solute(self) -> Optional[Vertex]:
-		success = False
 		state = self.init_state
 		heapq.heapify(self.opened)
 		heapq.heappush(self.opened, state)
-		i=0
 		while len(self.opened):
-			# print(i)
-			# i += 1
 			state = heapq.heappop(self.opened)
-			# print(f'steps to target = {state.steps_to_target}')
 			self.closed[state.state_to_str()] = state
 			if not self.heuristic(state.state, self.target_state):
-				success = True
 				break
 			for variant in variants_of_step(state, self.target_state, self.heuristic):
 				if variant not in self.closed.values() and variant not in self.opened:
 					heapq.heappush(self.opened, variant)
 				elif variant in self.closed.values():
-					state_from_closed = self.get_from_closed(variant)
-					if state_from_closed.steps_from_init > variant.steps_from_init:
-						self.closed.pop(state_from_closed.state_to_str())
-						heapq.heappush(self.opened, variant)
+					if not self.hungry_mode:
+						state_from_closed = self.get_from_closed(variant)
+						if state_from_closed.steps_from_init > variant.steps_from_init:
+							self.closed.pop(state_from_closed.state_to_str())
+							heapq.heappush(self.opened, variant)
 				else:
 					state_from_opened = self.get_from_opened(variant)
 					if variant.steps_from_init < state_from_opened.steps_from_init:
 						self.opened.remove(state_from_opened)
 						heapq.heappush(self.opened, variant)
-		if success:
-			print('Congratulate')
-			return state
-		else:
-			print('Ouch')
+		self.print_solution(state)
+		print(f'steps from init = {state.steps_from_init}')
+
 
 	def print_solution(self, state: Vertex) -> None:
 		if state is None:

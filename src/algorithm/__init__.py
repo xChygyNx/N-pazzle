@@ -59,7 +59,7 @@ def next_step(state: Vertex, target: List[List[int]],
 		if result is None:
 			result = variant
 		else:
-			result = variant if variant.steps_to_target < result.steps_to_target else result
+			result = variant if variant < result else result
 	return result
 
 

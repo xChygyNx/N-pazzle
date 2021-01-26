@@ -4,6 +4,7 @@ from src.exceptions.exceptions import *
 from src.prepare.heuristics import *
 from src.prepare.generating_state import *
 from src.algorithm.a_star import *
+import timeit
 
 
 heuristics = {
@@ -29,7 +30,10 @@ if __name__ == '__main__':
 	step_to_target = heuristic(init_state, target_state)
 	init_vertex = Vertex(state=init_state, steps_from_init=0,
 	                     steps_to_target=step_to_target)
-	n_puzzle = Algorithm(init_state=init_vertex, target=target_state, heuristic=heuristic)
-	n_puzzle.solute()
+	n_puzzle = Algorithm(init_state=init_vertex, target=target_state,
+						heuristic=heuristic, hungry_mode=args.hungry)
+	# n_puzzle.solute()
+	time = timeit.timeit(n_puzzle.solute, number=1)
+	print(f'time = {time}')
 
 
