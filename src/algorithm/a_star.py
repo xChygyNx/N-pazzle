@@ -25,7 +25,7 @@ class Algorithm:
 
 
 	def get_from_closed(self, vertex: Vertex) -> Vertex:
-		result = self.closed.get(vertex.state_to_str())
+		result = self.closed.get(vertex.str_state)
 		return result
 
 	def get_from_opened(self, state: Vertex) -> Vertex:
@@ -39,17 +39,17 @@ class Algorithm:
 		heapq.heappush(self.opened, state)
 		while len(self.opened):
 			state = heapq.heappop(self.opened)
-			self.closed[state.state_to_str()] = state
+			self.closed[state.str_state] = state
 			if not self.heuristic(state.state, self.target_state):
 				break
 			for variant in variants_of_step(state, self.target_state, self.heuristic):
-				if variant not in self.closed.values() and variant not in self.opened:
+				if not (variant in self.closed.values() or variant in self.opened):
 					heapq.heappush(self.opened, variant)
 				elif variant in self.closed.values():
 					if not self.hungry_mode:
 						state_from_closed = self.get_from_closed(variant)
 						if state_from_closed.steps_from_init > variant.steps_from_init:
-							self.closed.pop(state_from_closed.state_to_str())
+							self.closed.pop(state_from_closed.str_state)
 							heapq.heappush(self.opened, variant)
 				else:
 					state_from_opened = self.get_from_opened(variant)

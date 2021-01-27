@@ -40,39 +40,27 @@ class Vertex:
 
 	def __lt__(self, other):
 		self.check(other)
-		if not self.__eq__(other):
-			if other.potential_steps < self.potential_steps:
-				return False
-			else:
-				return True
+		if self.potential_steps < other.potential_steps:
+			return True
 		return False
 
 	def __gt__(self, other):
 		self.check(other)
-		if not self.__eq__(other):
-			if other.potential_steps > self.potential_steps:
-				return False
-			else:
-				return True
+		if self.potential_steps > other.potential_steps:
+			return True
 		return False
 
 	def __le__(self, other):
 		self.check(other)
-		if not self.__eq__(other):
-			if other.potential_steps <= self.potential_steps:
-				return False
-			else:
-				return True
-		return True
+		if self.potential_steps <= other.potential_steps:
+			return True
+		return False
 
 	def __ge__(self, other):
 		self.check(other)
-		if not self.__eq__(other):
-			if other.potential_steps >= self.potential_steps:
-				return False
-			else:
-				return True
-		return True
+		if self.potential_steps >= other.potential_steps:
+			return True
+		return False
 
 	def state_to_str(self):
 		res = ''
@@ -81,16 +69,23 @@ class Vertex:
 				res += str(num)
 		return res
 
-	# def potential_steps(self):
-	# 	return self.steps_from_init + self.steps_to_target
-
 	def __hash__(self):
 		return hash(self.str_state)
 
 	def __eq__(self, other):
-		if isinstance(self, other.__class__) and hash(self.str_state) == hash(other.str_state):
-			return True
-		return False
+		if self.__hash__() != other.__hash__():
+			return False
+		if not isinstance(self, other.__class__):
+			return False
+		if len(self.state) != len(other.state):
+			return False
+		for first, second in zip(self.state, other.state):
+			if len(first) != len(second):
+				return False
+			for f_num, s_num in zip(first, second):
+				if f_num != s_num:
+					return False
+		return True
 
 	def print_state(self):
 		for step, line in enumerate(self.state):

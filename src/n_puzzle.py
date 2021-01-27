@@ -16,10 +16,6 @@ heuristics = {
 if __name__ == '__main__':
 	parser = ConsoleParser().get_argparse()
 	args = parser.parse_args()
-	# try:
-	# 	states = NPuzzle(side=args.side, start_file=args.start_file, target_file=args.target_file)
-	# 	states.print_states()
-	# 	print(args.hungry)
 	try:
 		init_state = InitState(args).get_state()
 		target_state = TargetState(args, init_state).get_state()
