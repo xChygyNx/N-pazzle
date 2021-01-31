@@ -30,6 +30,9 @@ if __name__ == '__main__':
 						heuristic=heuristic, hungry_mode=args.hungry)
 	# n_puzzle.solute()
 	time = timeit.timeit(n_puzzle.solute, number=1)
+	print(f'opened states = {len(n_puzzle.opened)}')
+	print(f'closed states = {len(n_puzzle.closed)}')
+	print(f'total states = {len(n_puzzle.opened) + len(n_puzzle.closed)}')
 	print(f'time = {time}')
 
 
