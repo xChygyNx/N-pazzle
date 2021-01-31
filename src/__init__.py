@@ -39,25 +39,21 @@ class Vertex:
 			raise NotImplementedError('matrixes different size')
 
 	def __lt__(self, other):
-		self.check(other)
 		if self.potential_steps < other.potential_steps:
 			return True
 		return False
 
 	def __gt__(self, other):
-		self.check(other)
 		if self.potential_steps > other.potential_steps:
 			return True
 		return False
 
 	def __le__(self, other):
-		self.check(other)
 		if self.potential_steps <= other.potential_steps:
 			return True
 		return False
 
 	def __ge__(self, other):
-		self.check(other)
 		if self.potential_steps >= other.potential_steps:
 			return True
 		return False
@@ -80,8 +76,6 @@ class Vertex:
 		if len(self.state) != len(other.state):
 			return False
 		for first, second in zip(self.state, other.state):
-			if len(first) != len(second):
-				return False
 			for f_num, s_num in zip(first, second):
 				if f_num != s_num:
 					return False

@@ -5,6 +5,7 @@ from src.prepare.heuristics import *
 from src.prepare.generating_state import *
 from src.algorithm.a_star import *
 import timeit
+import cProfile
 
 
 heuristics = {
@@ -31,5 +32,6 @@ if __name__ == '__main__':
 	# n_puzzle.solute()
 	time = timeit.timeit(n_puzzle.solute, number=1)
 	print(f'time = {time}')
+	# cProfile.run('n_puzzle.solute()')
 
 
