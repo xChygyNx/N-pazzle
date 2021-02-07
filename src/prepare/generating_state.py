@@ -7,7 +7,7 @@ from src.exceptions.exceptions import *
 from src.prepare.exist_solution import *
 
 
-__all__ = ['InitState', 'TargetState']
+__all__ = ['InitState', 'SnailState', 'StateFromFile', 'RandomInitStateGenerator']
 
 
 class RandomInitStateGenerator:
@@ -27,11 +27,11 @@ class RandomInitStateGenerator:
 
 
 class SnailState:
-	def __init__(self, side: int):
-		self.side = side
+	def __init__(self, init_state: List[List[int]]):
+		self.init_state = init_state
 
 	def get_state(self) -> List[List[int]]:
-		side = self.side
+		side = len(self.init_state)
 		matrix = [[0] * side for i in range(side)]
 		digit, indentation = 1, 0
 		for v in range(side // 2):
@@ -111,17 +111,4 @@ class InitState:
 			while not exist_solution:
 				state = RandomInitStateGenerator(self.args.size).get_state()
 				exist_solution = ExistSolution(state).exist_solution()
-		return state
-
-
-class TargetState:
-	def __init__(self, args, init_state: List[List[int]]):
-		self.args = args
-		self.init_state = init_state
-
-	def get_state(self) -> List[List[int]]:
-		size = len(self.init_state)
-		if self.args.size and self.args.size < 3:
-			raise InvalidStateSize
-		state = SnailState(size).get_state()
 		return state

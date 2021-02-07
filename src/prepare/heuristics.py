@@ -3,6 +3,7 @@ import math
 
 __all__ = ['manhattan_distance', 'linear_conflict', 'corner_tiles']
 
+
 class Location(NamedTuple):
 	x: int
 	y: int
@@ -27,7 +28,6 @@ def manhattan_distance(state: List[List[int]], target: List[List[int]]) -> int:
 
 
 def count_conflicts(state_line: List[int], target_line: List[int]) -> int:
-	# res = manhattan_distance(state, target)
 	res = 0
 	for i in range(len(state_line) - 1):
 		for j in range(i + 1, len(state_line)):
@@ -71,39 +71,3 @@ def corner_tiles(state: List[List[int]], target: List[List[int]]) -> int:
 			if not (state[i][j] in target[i]) or (state[i][j] in transpose_target[j]):
 				res += 2
 	return res
-
-
-# def count_num(matrix, num):
-# 	res = 0
-# 	for line in matrix:
-# 		res += line.count(num)
-# 	return res
-
-
-# print(count_conflicts([3, 5, 1, 2, 4], [1, 2, 3, 4, 5]))
-# matrix = [
-# 	[1, 2, 3, 4, 5],
-# 	[6, 7, 8, 9, 10],
-# 	[11, 12, 13, 14, 15],
-# 	[16, 17, 18, 19, 20],
-# 	[21, 22, 23, 24, 25]
-# ]
-# target = [
-# 	[1, 18, 16, 7, 19],
-# 	[20, 2, 4, 24, 10],
-# 	[12, 11, 21, 23, 6],
-# 	[15, 8, 13, 5, 22],
-# 	[9, 17, 3, 25, 14]
-# ]
-#
-# print(manhattan_distance(target, matrix), linear_conflict(target, matrix), corner_tiles(target, matrix))
-# tr = transpose_matrix(matrix)
-# for line in matrix:
-# 	for num in line:
-# 		print(num, end='\t')
-# 	print()
-# print()
-# for line in tr:
-# 	for num in line:
-# 		print(num, end='\t')
-# 	print()

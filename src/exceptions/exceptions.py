@@ -1,5 +1,5 @@
 __all__ = ['NeedUsage', 'NotValidMatrix', 'ImpossibleSolute', 'NotFoundVoid', 'InvalidStateSize',
-		   'InvalidNumInState']
+			'InvalidNumInState']
 
 
 class NotValidMatrix(Exception):
@@ -36,9 +36,9 @@ class NotFoundVoid(Exception):
 class NeedUsage(Exception):
 	def __init__(self):
 		self.text = " For launch program need least one parameter:\n" \
-		            "-sf - file with start state (need positive digit more 0)\n" \
-		            "-tf - file with target state\n" \
-		            "-s - side of start and target state"
+					"-sf - file with start state (need positive digit more 0)\n" \
+					"-tf - file with target state\n" \
+					"-s - side of start and target state"
 
 	def __str__(self):
 		return self.text

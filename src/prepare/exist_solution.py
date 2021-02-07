@@ -15,7 +15,6 @@ class ExistSolution:
 		src_line_with_void = self.define_line_with_void(tmp_state)
 		src_list = FormatState().matrix_to_list(tmp_state)
 		src_inversion = self.count_inversions(src_list)
-		# print(src_inversion + src_line_with_void, dst_inversion + dst_line_with_void)
 		return (src_line_with_void + src_inversion) % 2 == 0
 
 	def define_line_with_void(self, state: List[List[int]]) -> int:
@@ -51,6 +50,3 @@ class ExistSolution:
 				break
 		y = state[x].index(0)
 		return x, y
-
-
-

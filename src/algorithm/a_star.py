@@ -1,32 +1,68 @@
-from typing import List, Callable, Set, Dict, Optional
-from src.algorithm import *
-from src.prepare.heuristics import *
-from copy import deepcopy
-from src import Vertex
-import timeit
 import heapq
-import cProfile
+from typing import List, Callable
+from src.algorithm import *
+from src import Vertex
 
-__all__ = ['Algorithm']
+__all__ = ['AlgorithmFactory', 'AStarAlgorithm', 'BFSAlgorithm']
 
 WHITE = '\033[37m'
 
 
 class Algorithm:
-	def __init__(self, *, init_state: Vertex, target: List[List[int]],
-	             heuristic: Callable[[List[List[int]], List[List[int]]], int],
-				 hungry_mode: bool = False):
-		self.opened = []
-		self.closed = dict()
+	def __init__(self, *, init_state: Vertex, target: List[List[int]], hungry_mode: bool):
 		self.init_state = init_state
 		self.target_state = target
-		self.heuristic = heuristic
 		self.hungry_mode = hungry_mode
+		self.opened = []
+		self.closed = dict()
 
+	def solute(self):
+		raise NotImplementedError
 
 	def get_from_closed(self, vertex: Vertex) -> Vertex:
 		result = self.closed.get(vertex.str_state)
 		return result
+
+	def print_solution(self, state: Vertex) -> None:
+		if state is None:
+			return
+		solution = []
+		tmp = state
+		while tmp is not None:
+			solution.append(tmp)
+			tmp = tmp.parent
+		solution.reverse()
+		print(WHITE)
+		for step, elem in enumerate(solution):
+			print(f'Step {step}')
+			elem.print_state()
+			print()
+
+
+
+class AlgorithmFactory:
+	def __init__(self, *, init_state: Vertex, target: List[List[int]],
+				heuristic: Callable[[List[List[int]], List[List[int]]], int],
+				hungry_mode: bool, uss: bool):
+		self.init_state = init_state
+		self.target_state = target
+		self.heuristic = heuristic
+		self.hungry_mode = hungry_mode
+		self.uninformed_search_strategy = uss
+
+	def get_algorithm(self) -> Algorithm:
+		if self.uninformed_search_strategy:
+			return BFSAlgorithm(self.init_state, self.target_state, self.hungry_mode)
+		else:
+			return AStarAlgorithm(self.init_state, self.target_state, self.heuristic, self.hungry_mode)
+
+
+class AStarAlgorithm(Algorithm):
+	def __init__(self, init_state: Vertex, target: List[List[int]],
+				heuristic: Callable[[List[List[int]], List[List[int]]], int],
+				hungry_mode: bool = False):
+		super().__init__(init_state=init_state, target=target, hungry_mode=hungry_mode)
+		self.heuristic = heuristic
 
 	def get_from_opened(self, state: Vertex) -> Vertex:
 		ind = self.opened.index(state)
@@ -60,18 +96,23 @@ class Algorithm:
 		print(f'steps from init = {state.steps_from_init}')
 
 
-	def print_solution(self, state: Vertex) -> None:
-		if state is None:
-			return
-		solution = []
-		tmp = state
-		while tmp is not None:
-			solution.append(tmp)
-			tmp = tmp.parent
-		solution.reverse()
-		print(WHITE)
-		for step, elem in enumerate(solution):
-			print(f'Step {step}')
-			elem.print_state()
-			print()
+class BFSAlgorithm(Algorithm):
+	def __init__(self, init_state: Vertex, target: List[List[int]],
+				hungry_mode: bool = False):
+		super().__init__(init_state=init_state, target=target, hungry_mode=hungry_mode)
 
+	def solute(self):
+		state = self.init_state
+		self.opened.append(state)
+		while self.opened:
+			state = self.opened.pop(0)
+			self.closed[state.str_state] = state
+			if state.state == self.target_state:
+				break
+			for variant in variants_of_step(state, self.target_state):
+				if not (variant in self.closed.values() or variant in self.opened):
+					self.opened.append(variant)
+				elif variant in self.closed.values():
+					continue
+		self.print_solution(state)
+		print(f'steps from init = {state.steps_from_init}')
