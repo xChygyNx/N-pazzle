@@ -100,19 +100,3 @@ class Vertex:
 
 	def __str__(self):
 		return str(self.steps_to_target)
-
-
-# if __name__ == '__main__':
-# 	a = Vertex(state=[[2, 2], [4, 6]], steps_from_init=-43)
-# 	b = Vertex(state=[[2, 4], [4, 6]], parent=a, steps_from_init=1)
-# 	c = Vertex(state=[[2, 2], [4, 6]], parent=a, steps_from_init=1)
-# 	mn = {c}
-# 	print(a in mn)
-# 	tmp = {a}.intersection(mn)
-# 	d = tmp.pop()
-# 	a.steps_from_init = 66
-# 	print(d.parent.steps_from_init)
-#
-# 	# print(d.steps_from_init)
-
-
