@@ -37,8 +37,7 @@ class NeedUsage(Exception):
 	def __init__(self):
 		self.text = " For launch program need least one parameter:\n" \
 					"-sf - file with start state (need positive digit more 0)\n" \
-					"-tf - file with target state\n" \
-					"-s - side of start and target state"
+					"-s - side of start and target state\n"
 
 	def __str__(self):
 		return self.text

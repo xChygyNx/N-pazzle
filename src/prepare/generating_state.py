@@ -98,10 +98,10 @@ class InitState:
 		self.args = args
 
 	def get_state(self) -> List[List[int]]:
-		if not (self.args.init_file or self.args.size):
+		if not (self.args.file or self.args.size):
 			raise NeedUsage
-		elif self.args.init_file:
-			state = StateFromFile(self.args.init_file).get_state()
+		elif self.args.file:
+			state = StateFromFile(self.args.file).get_state()
 			if not ExistSolution(state).exist_solution():
 				raise ImpossibleSolute
 		else:

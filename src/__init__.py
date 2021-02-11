@@ -10,13 +10,14 @@ WHITE = '\033[37m'
 
 class Vertex:
 	def __init__(self, *, state: List[List[int]], parent: Any = None, steps_from_init: int,
-				steps_to_target: float):
+				steps_to_target: float, turn: str = None):
 		self.parent = parent
 		self.state = state
 		self.steps_from_init = steps_from_init
 		self.steps_to_target = steps_to_target
 		self.potential_steps = steps_to_target + steps_from_init
 		self.str_state = self.state_to_str()
+		self.turn = turn
 
 	def is_square(self) -> bool:
 		row_count = len(self.state)

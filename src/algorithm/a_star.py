@@ -27,17 +27,24 @@ class Algorithm:
 		if state is None:
 			return
 		solution = []
+		moves = []
 		tmp = state
 		while tmp is not None:
 			solution.append(tmp)
+			if tmp.turn is not None:
+				moves.append(tmp.turn)
 			tmp = tmp.parent
 		solution.reverse()
+		moves.reverse()
 		print(WHITE)
 		for step, elem in enumerate(solution):
 			print(f'Step {step}')
 			elem.print_state()
 			print()
-
+		print('Sequence of moves:')
+		for move in moves:
+			print(move, end=' ')
+		print()
 
 
 class AlgorithmFactory:
@@ -93,6 +100,7 @@ class AStarAlgorithm(Algorithm):
 						self.opened.remove(state_from_opened)
 						heapq.heappush(self.opened, variant)
 		self.print_solution(state)
+		print()
 		print(f'steps from init = {state.steps_from_init}')
 
 
@@ -115,4 +123,5 @@ class BFSAlgorithm(Algorithm):
 				elif variant in self.closed.values():
 					continue
 		self.print_solution(state)
+		print()
 		print(f'steps from init = {state.steps_from_init}')

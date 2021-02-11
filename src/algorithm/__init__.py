@@ -29,25 +29,25 @@ def variants_of_step(state: Vertex, target: List[List[int]], heuristic: Callable
 			next_state[void.row - 1][void.column], next_state[void.row][void.column]
 		steps_to_target = heuristic(next_state, target) if heuristic is not None else 0
 		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
-					steps_to_target=steps_to_target)
+					steps_to_target=steps_to_target, turn='Down')
 	if void.row < (len(state.state) - 1):
 		next_state = deepcopy(state.state)
 		next_state[void.row][void.column], next_state[void.row + 1][void.column] = \
 			next_state[void.row + 1][void.column], next_state[void.row][void.column]
 		steps_to_target = heuristic(next_state, target) if heuristic is not None else 0
 		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
-					steps_to_target=steps_to_target)
+					steps_to_target=steps_to_target, turn='Up')
 	if void.column > 0:
 		next_state = deepcopy(state.state)
 		next_state[void.row][void.column], next_state[void.row][void.column - 1] =\
 			next_state[void.row][void.column - 1], next_state[void.row][void.column]
 		steps_to_target = heuristic(next_state, target) if heuristic is not None else 0
 		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
-					steps_to_target=steps_to_target)
+					steps_to_target=steps_to_target, turn='Right')
 	if void.column < (len(state.state[void.row]) - 1):
 		next_state = deepcopy(state.state)
 		next_state[void.row][void.column], next_state[void.row][void.column + 1] = \
 			next_state[void.row][void.column + 1], next_state[void.row][void.column]
 		steps_to_target = heuristic(next_state, target) if heuristic is not None else 0
 		yield Vertex(state=next_state, parent=state, steps_from_init=state.steps_from_init + 1,
-					steps_to_target=steps_to_target)
+					steps_to_target=steps_to_target, turn='Left')

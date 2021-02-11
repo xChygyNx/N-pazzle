@@ -20,7 +20,7 @@ if __name__ == '__main__':
 	try:
 		init_state = InitState(args).get_state()
 		target_state = SnailState(init_state).get_state()
-	except (NeedUsage, ImpossibleSolute, InvalidStateSize, InvalidNumInState, FileNotFoundError) as exc:
+	except (NotValidMatrix, NeedUsage, ImpossibleSolute, InvalidStateSize, InvalidNumInState, FileNotFoundError) as exc:
 		print(exc)
 		exit()
 	heuristic = heuristics.get(args.heuristics)
